@@ -1,0 +1,14 @@
+node_modules/
+dist/
+pwa_dist/
+release/
+.env
+*.log
+config.json
+icon_design.html
+generate_icon.ps1
+companion/build/
+pwa/node_modules/
+companion/node_modules/
+.DS_Store
+Thumbs.db

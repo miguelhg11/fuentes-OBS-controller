@@ -1,0 +1,44 @@
+{
+  "name": "obs-orchestra-companion",
+  "version": "1.0.0",
+  "description": "Companion local para controlar OBS desde PWA",
+  "main": "dist/main.js",
+  "scripts": {
+    "start": "electron dist/main.js",
+    "dev": "ts-node src/index.ts",
+    "build": "tsc",
+    "electron:build": "npm run build && electron-builder"
+  },
+  "dependencies": {
+    "@fastify/cors": "^10.1.0",
+    "@fastify/static": "^9.0.0",
+    "bonjour-service": "^1.3.0",
+    "dotenv": "^16.6.1",
+    "fastify": "^5.7.4",
+    "obs-websocket-js": "^5.0.7",
+    "qrcode": "^1.5.4",
+    "qrcode-terminal": "^0.12.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.10",
+    "@types/qrcode": "^1.5.5",
+    "electron": "^40.2.1",
+    "electron-builder": "^26.7.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "pkg": {
+    "assets": [
+      "dist/**/*",
+      "../pwa/dist/**/*",
+      "config.json"
+    ],
+    "targets": [
+      "node18-win-x64"
+    ]
+  }
+}

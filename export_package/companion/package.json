@@ -1,0 +1,29 @@
+{
+  "name": "obs-orchestra-companion",
+  "version": "1.0.0",
+  "description": "Companion local para controlar OBS desde PWA",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "dev": "ts-node src/index.ts",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@fastify/cors": "^10.1.0",
+    "bonjour-service": "^1.3.0",
+    "dotenv": "^16.6.1",
+    "fastify": "^5.7.4",
+    "obs-websocket-js": "^5.0.7",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.10",
+    "@types/qrcode": "^1.5.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}

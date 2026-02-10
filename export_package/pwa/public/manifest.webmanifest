@@ -1,0 +1,16 @@
+{
+    "name": "OBS Orchestra Control",
+    "short_name": "OBS Orchestra",
+    "description": "Control remoto zero-friction para OBS",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#0a0a0a",
+    "theme_color": "#3b82f6",
+    "icons": [
+        {
+            "src": "vite.svg",
+            "sizes": "any",
+            "type": "image/svg+xml"
+        }
+    ]
+}

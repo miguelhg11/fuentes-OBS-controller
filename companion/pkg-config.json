@@ -1,0 +1,13 @@
+{
+    "pkg": {
+        "assets": [
+            "dist/**/*",
+            "../pwa/dist/**/*",
+            "config.json"
+        ],
+        "targets": [
+            "node18-win-x64"
+        ],
+        "outputPath": "bin"
+    }
+}

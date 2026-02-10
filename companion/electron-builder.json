@@ -1,0 +1,16 @@
+{
+    "appId": "com.antigravity.obs-orchestra",
+    "productName": "OBS Orchestra",
+    "directories": {
+        "output": "../release"
+    },
+    "files": [
+        "dist/**/*",
+        "dashboard/**/*",
+        "pwa_dist/**/*",
+        "package.json"
+    ],
+    "win": {
+        "target": "portable"
+    }
+}

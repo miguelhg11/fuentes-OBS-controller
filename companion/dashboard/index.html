@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>OBS Orchestra Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.0/build/qrcode.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: black;
+            color: white;
+            overflow: hidden;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .accent-gradient {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        }
+
+        .accent-shadow {
+            shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+        }
+
+        .glow {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+    </style>
+</head>
+
+<body class="p-8 h-screen flex flex-col justify-between">
+    <div class="space-y-8">
+        <!-- Header -->
+        <header class="flex justify-between items-start">
+            <div>
+                <div class="flex items-center gap-2 mb-2">
+                    <div class="w-2 h-2 rounded-full bg-blue-500 animate-pulse glow"></div>
+                    <span class="text-[10px] font-black tracking-[0.3em] text-gray-400 uppercase">Servidor Activo</span>
+                </div>
+                <h1 class="text-4xl font-black italic tracking-tighter">ORCHESTRA</h1>
+                <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Maestro de Audio v1.0</p>
+            </div>
+            <div class="glass px-4 py-2 rounded-2xl flex items-center gap-2">
+                <span id="status-dot" class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                <span id="status-text"
+                    class="text-[9px] font-black uppercase tracking-widest text-gray-400">Desconectado</span>
+            </div>
+        </header>
+
+        <!-- QR Section -->
+        <div class="flex flex-col items-center py-4 gap-4">
+            <div class="glass p-5 rounded-[2.5rem] relative">
+                <canvas id="qrcode" class="rounded-xl"></canvas>
+            </div>
+            <p
+                class="text-[9px] text-gray-500 font-bold uppercase tracking-[0.2em] text-center max-w-[200px] leading-relaxed">
+                Apunta con tu cámara para conectar</p>
+        </div>
+
+        <!-- Stepper Instructions -->
+        <div class="space-y-4 px-2">
+            <h3 class="text-[10px] font-black text-blue-500 uppercase tracking-[0.3em] mb-4">Guía de Inicio Rápido</h3>
+            <div class="space-y-4">
+                <div class="flex gap-4 group">
+                    <div
+                        class="w-8 h-8 rounded-xl glass border-blue-500/30 flex items-center justify-center text-[10px] font-black text-blue-400 shrink-0">
+                        1</div>
+                    <p class="text-[11px] font-medium text-gray-300 leading-tight"><b
+                            class="text-white block mb-0.5">Prepara OBS:</b> Abre OBS y asegúrate de que el WebSocket
+                        esté activo (Herramientas > Ajustes de WebSocket).</p>
+                </div>
+                <div class="flex gap-4 group">
+                    <div
+                        class="w-8 h-8 rounded-xl glass border-blue-500/30 flex items-center justify-center text-[10px] font-black text-blue-400 shrink-0">
+                        2</div>
+                    <p class="text-[11px] font-medium text-gray-300 leading-tight"><b
+                            class="text-white block mb-0.5">Misma Red:</b> Conecta tu móvil a la misma red Wi-Fi que
+                        este ordenador.</p>
+                </div>
+                <div class="flex gap-4 group">
+                    <div
+                        class="w-8 h-8 rounded-xl glass border-blue-500/30 flex items-center justify-center text-[10px] font-black text-blue-400 shrink-0">
+                        3</div>
+                    <p class="text-[11px] font-medium text-gray-300 leading-tight"><b
+                            class="text-white block mb-0.5">Conecta:</b> Escanea el código anterior o pon la IP de abajo
+                        en el navegador de tu dispositivo.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- IP List -->
+        <div class="space-y-4">
+            <h3 class="text-[10px] font-black text-gray-600 uppercase tracking-widest px-2">Puntos de acceso detectados
+            </h3>
+            <div id="ip-container" class="space-y-2">
+                <!-- IP Items here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Action -->
+    <footer class="space-y-4">
+        <button onclick="openLocal()"
+            class="w-full accent-gradient p-5 rounded-[2rem] font-black text-xs uppercase tracking-[0.2em] shadow-2xl accent-shadow active:scale-[0.98] transition-transform flex items-center justify-center gap-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                <polyline points="15 3 21 3 21 9" />
+                <line x1="10" y1="14" x2="21" y2="3" />
+            </svg>
+            Abrir Control Local
+        </button>
+        <p class="text-center text-[9px] text-gray-600 font-black uppercase tracking-widest">Antigravity Codex Engine
+            5.2</p>
+    </footer>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const mainUrl = urlParams.get('url');
+        const ips = urlParams.get('ips').split(',');
+        const port = urlParams.get('port');
+
+        // Generar QR
+        QRCode.toCanvas(document.getElementById('qrcode'), mainUrl, {
+            width: 180,
+            margin: 0,
+            color: { dark: '#ffffff', light: '#00000000' }
+        });
+
+        // Llenar IPs
+        const container = document.getElementById('ip-container');
+        ips.forEach(ip => {
+            const url = `http://${ip}:${port}`;
+            const div = document.createElement('div');
+            div.className = 'glass p-4 rounded-3xl flex justify-between items-center group cursor-pointer hover:bg-white/10 transition-colors';
+            div.onclick = () => require('electron').shell.openExternal(url);
+            div.innerHTML = `
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-2xl bg-white/5 flex items-center justify-center text-blue-400 font-bold text-xs">${ip.split('.').pop()}</div>
+                    <span class="text-xs font-black tracking-tight text-white/80">${url}</span>
+                </div>
+                <div class="text-[10px] font-black text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity">COPIAR</div>
+            `;
+            container.appendChild(div);
+        });
+
+        function openLocal() {
+            require('electron').shell.openExternal(mainUrl);
+        }
+
+        // Simular chequeo de salud del servidor
+        setInterval(async () => {
+            try {
+                const resp = await fetch(`${mainUrl}/health`);
+                const data = await resp.json();
+                const dot = document.getElementById('status-dot');
+                const text = document.getElementById('status-text');
+
+                if (data.obsConnected) {
+                    dot.className = 'w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_10px_#22c55e]';
+                    text.innerText = 'Sincronizado con OBS';
+                    text.className = 'text-[9px] font-black uppercase tracking-widest text-green-500/80';
+                } else {
+                    dot.className = 'w-1.5 h-1.5 rounded-full bg-yellow-500 shadow-[0_0_10px_#eab308]';
+                    text.innerText = 'Esperando OBS';
+                    text.className = 'text-[9px] font-black uppercase tracking-widest text-yellow-500/80';
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }, 2000);
+    </script>
+</body>
+
+</html>
